@@ -33,7 +33,7 @@ app.use('/bootstrap', express.static('./node_modules/bootstrap/dist'))
 //adicionar css
 app.use('/css', express.static('./css'))
 //referenciar a pasta de imagem
-app.use('imagens',express.static('./imagens'))
+app.use('/imagens',express.static('./imagens'))
 //rota principal
 // app.get('/', (req, res) => {
 //     res.render('formulario')
@@ -78,6 +78,32 @@ app.get('/remover/:codigo&:imagem', (req, res)=>{
     console.log(req.params.imagem)
     res.end()
 })
+
+
+// *************** FUNÇÃO PARA EDITAR OS PRODUTOS
+// Rota para editar produtos
+app.post('/editar', function(req, res){
+
+    // Obter os dados do formulário
+    let nome = req.body.nome;
+    let valor = req.body.valor;
+    let codigo = req.body.codigo;
+
+
+        // SQL
+        let sql = `UPDATE produtos SET nome='${nome}', valor=${valor} WHERE codigo=${codigo}`;
+
+        // Executar comando SQL
+        pool.query(sql, function (erro, retorno) {
+            if (erro) throw erro;
+        });
+    
+
+
+    // Redirecionamento
+    res.redirect('/');
+});
+
 
 //Servidor
 app.listen(PORT, () => {
